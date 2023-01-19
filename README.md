@@ -1,4 +1,4 @@
 # My_Study_App
 Personalized Study App
-# HOSTED LINK
+~~ HOSTED LINK ~~
 http://akashh.pythonanywhere.com/
