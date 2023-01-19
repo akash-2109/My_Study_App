@@ -6,6 +6,7 @@ from youtubesearchpython import VideosSearch
 import requests
 import wikipedia
 from django.contrib.auth.decorators import login_required
+import random
 
 # Create your views here.
 
@@ -204,14 +205,25 @@ def wiki(request):
     if request.method == "POST":
         text = request.POST['text']
         form = DashboardForm(request.POST)
-        search = wikipedia.page(text)
-        context = {
-            'form': form,
-            'title': search.title,
-            'link': search.url,
-            'details': search.summary
-        }
-        return render(request, 'dashboard/wiki.html', context)
+        try:
+            search = wikipedia.page(text)
+            if search and search.title and search.url and search.summary:
+                context = {
+                    'form': form,
+                    'title': search.title,
+                    'link': search.url,
+                    'details': search.summary
+                }
+                return render(request, 'dashboard/wiki.html', context)
+        except wikipedia.DisambiguationError as e:
+            #            s = random.choice(e.options)
+            context = {
+                'form': form,
+                'title': "opps!! /n Something went wrong. Please type correct spelling. ",
+                'link': " ",
+                'details': " "
+            }
+            return render(request, 'dashboard/wiki.html', context)
     else:
         form = DashboardForm()
         context = {
